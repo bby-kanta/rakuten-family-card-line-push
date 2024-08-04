@@ -10,8 +10,14 @@ const lineClient = new LineBotSDK.Client({
   channelAccessToken: LINE_CHANNEL_ACCESS_TOKEN,
 });
 
-function daily() {
+/**
+ * 日時で実行する関数
+ * 本日の楽天家族カード利用履歴を取得し、LINEに通知する
+ * @returns {void}
+ */
+function daily(): void {
   const today = formatDate();
+  const altText = `【${today.toISOString().split('T')[0]}分】家族カード利用履歴`;
 
   const rakutenMailParser = new RakutenMailParser();
   const rakutenMailGetter = new RakutenMailGetter();
@@ -29,7 +35,7 @@ function daily() {
       const noticeMessage = new NoticePaymentHistoryMessage(familyPaymentInfoList);
 
       // LINEにメッセージを送信
-      sendLineMessage(noticeMessage);
+      sendLineMessage(noticeMessage, altText);
     }
   }
 }
@@ -38,10 +44,10 @@ function daily() {
  * LINEにメッセージを送信する
  * @param {NoticePaymentHistoryMessage} noticeMessage - 送信するメッセージオブジェクト
  */
-function sendLineMessage(noticeMessage: NoticePaymentHistoryMessage) {
+function sendLineMessage(noticeMessage: NoticePaymentHistoryMessage, altText: string): void {
   const payload = {
     type: "flex",
-    altText: "カード利用のお知らせ",
+    altText: altText,
     contents: {
       type: noticeMessage.type,
       header: noticeMessage.header,
