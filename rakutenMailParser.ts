@@ -25,35 +25,3 @@ export class RakutenMailParser {
     return new PaymentInfoList(paymentInfoList);
   }
 }
-
-
-export class Message {
-  message: string;
-
-  constructor(message: string) {
-    this.message = message;
-  }
-
-  private extractPaymentInfo = (prefix: string): string => {
-    const matched: RegExpMatchArray | null = this.message.match(`${prefix}.+`);
-    return matched ? matched[0].replace(prefix, "").trim() : "";
-  };
-
-  getUseDay(): string {
-    return this.extractPaymentInfo("■利用日: ");
-  }
-
-  getUseStore(): string {
-    return this.extractPaymentInfo("■利用先: ");
-  }
-
-  getUser(): string {
-    return this.extractPaymentInfo("■利用者: ");
-  }
-
-  getAmount(): number {
-    const amountString = this.extractPaymentInfo("■利用金額: ");
-    const amount = parseFloat(amountString.replace(/[^0-9.]/g, ""));
-    return isNaN(amount) ? 0 : amount;
-  }
-}

@@ -4,8 +4,6 @@ import { BoxContent, TextContent, Separator } from "./lineMessage.ts";
 const DISPLAY_HIMSELF = PropertiesService.getScriptProperties().getProperty("DISPLAY_HIMSELF");
 const DISPLAY_FAMILY = PropertiesService.getScriptProperties().getProperty("DISPLAY_FAMILY");
 
-// 他のインポートやクラス定義は省略
-
 export class NoticePaymentHistoryMessage {
   type: string;
   header: BoxContent | undefined;
