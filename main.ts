@@ -52,7 +52,7 @@ function monthly(): void {
 
   const today = formatDate();
   const startDate = new Date(today.getFullYear(), today.getMonth() - 2, 20);
-  const altText = `【${today.getFullYear()}年${(today.getMonth() + 1).toString()}月の推定支払金額】`;
+  const title = `${today.getFullYear()}年${(today.getMonth() + 1).toString()}月の推定支払金額レポート`;
 
   const mails = rakutenMailGetter.getByDateRange(startDate, today);
   if (mails.length > 0) {
@@ -70,9 +70,9 @@ function monthly(): void {
     const result = new PaymentInfoList(array).sortByDate("asc");
     Logger.log(result);
 
-    const noticeMessage = new NoticePaymentHistoryMessage(result);
+    const noticeMessage = new NoticePaymentHistoryMessage(result, title);
 
-    sendLineMessage(noticeMessage, altText);
+    sendLineMessage(noticeMessage, title);
   }
 }
 

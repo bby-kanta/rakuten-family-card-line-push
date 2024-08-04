@@ -9,22 +9,35 @@ export class NoticePaymentHistoryMessage {
   header: BoxContent | undefined;
   body: BoxContent | undefined;
 
-  constructor(paymentInfoList: PaymentInfoList) {
+  constructor(paymentInfoList: PaymentInfoList, headerText?: string) {
     this.type = "bubble";
-    this.header = this.getHeader();
+    this.header = this.getHeader(headerText);
     this.body = this.getBody(paymentInfoList);
   }
 
-  private getHeader(): BoxContent | undefined {
+  private getHeader(headerText?: string): BoxContent | undefined {
     const header = new BoxContent({ layout: "vertical" });
-    const headerContent = new TextContent({
+
+    const mainHeaderContent = new TextContent({
       text: "家族カード利用のお知らせ",
       align: "center",
       color: "#800000",
       weight: "bold",
       size: "xl",
     });
-    header.addContent(headerContent);
+    header.addContent(mainHeaderContent);
+
+    if (headerText) {
+      const subHeaderContent = new TextContent({
+        text: headerText,
+        align: "center",
+        color: "#000000",
+        size: "md",
+        margin: "sm",
+      });
+      header.addContent(subHeaderContent);
+    }
+
     return header;
   }
 
