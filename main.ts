@@ -1,5 +1,5 @@
 
-import { RakutenMailGetter } from './RakutenMailGetter.ts';
+import { RakutenMailGetter } from './rakutenMailGetter.ts';
 import { NoticePaymentHistoryMessage } from './noticePaymentMessage.ts';
 import { RakutenMailParser } from './rakutenMailParser.ts';
 
