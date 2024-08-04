@@ -11,7 +11,7 @@ export class RakutenMailGetter {
     Logger.log(`formattedDate: ${formattedDate}`);
     Logger.log(`nextDate: ${nextDate}`);
   
-    // メールの検索クエリを作成（特定の日付に基づく検索）
+    // メールの検索クエリを作成（特定の日付に基づく検索、速報版は除外する）
     const query = `subject:"カード利用のお知らせ(本人・家族会員ご利用分)" after:${formattedDate} before:${nextDate} -:"速報版"`;
     const threads = GmailApp.search(query);
   

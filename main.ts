@@ -20,9 +20,12 @@ function daily() {
   if (mails.length > 0) {
     for (const mail of mails) {
       const paymentInfoList = rakutenMailParser.parseMessage(mail.getPlainBody());
+
+      // 家族利用分のみ抽出
       const familyPaymentInfoList = paymentInfoList.extractPerUser("家族");
       Logger.log(familyPaymentInfoList);
 
+      // LINEのフレックスメッセージを作成
       const noticeMessage = new NoticePaymentHistoryMessage(familyPaymentInfoList);
 
       // LINEにメッセージを送信
