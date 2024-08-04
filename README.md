@@ -2,6 +2,9 @@
 楽天家族カード利用のお知らせメールをGmailから取得、整形し、LINE BOT経由で送信するGASのスクリプトです。
 本来GASではTypeScriptを使えませんが、[clasp](https://github.com/google/clasp)を使用することにより、ローカルでTypeScriptを用いて開発し、GASにデプロイをすることができるようになります。
 
+![ダウンロード](https://github.com/user-attachments/assets/f4c942a4-510f-4b58-a8f6-5777cb81a8dd)
+
+
 # セットアップ
 #### npmでclaspをインストール
 ```shell
