@@ -2,6 +2,7 @@
 import { RakutenMailGetter } from './rakutenMailGetter.ts';
 import { NoticePaymentHistoryMessage } from './noticePaymentMessage.ts';
 import { RakutenMailParser } from './rakutenMailParser.ts';
+import { PaymentInfo, PaymentInfoList } from './paymentInfo.ts';
 
 const LINE_GROUP_ID = PropertiesService.getScriptProperties().getProperty("LINE_GROUP_ID");
 const LINE_CHANNEL_ACCESS_TOKEN = PropertiesService.getScriptProperties().getProperty("LINE_CHANNEL_ACCESS_TOKEN");
@@ -37,6 +38,41 @@ function daily(): void {
       // LINEにメッセージを送信
       sendLineMessage(noticeMessage, altText);
     }
+  }
+}
+
+/**
+ * 月次で実行する関数
+ * 前月分の楽天家族カード利用履歴を取得し、LINEに通知する
+ * @returns {void}
+ */
+function monthly(): void {
+  const rakutenMailParser = new RakutenMailParser();
+  const rakutenMailGetter = new RakutenMailGetter();
+
+  const today = formatDate();
+  const startDate = new Date(today.getFullYear(), today.getMonth() - 2, 20);
+  const altText = `【${today.getFullYear()}年${(today.getMonth() + 1).toString()}月の推定支払金額】`;
+
+  const mails = rakutenMailGetter.getByDateRange(startDate, today);
+  if (mails.length > 0) {
+    const paymentMonth = `${today.getFullYear()}/${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+
+    const array: PaymentInfo[] = [];
+    for (const mail of mails) {
+      const paymentInfoList = rakutenMailParser.parseMessage(mail.getPlainBody());
+
+      // 家族利用分のみ抽出
+      const familyPaymentInfoList = paymentInfoList.extractPerUser("家族").extractByPaymentMonth(paymentMonth);
+
+      array.push(...familyPaymentInfoList.all());
+    }
+    const result = new PaymentInfoList(array).sortByDate("asc");
+    Logger.log(result);
+
+    const noticeMessage = new NoticePaymentHistoryMessage(result);
+
+    sendLineMessage(noticeMessage, altText);
   }
 }
 
