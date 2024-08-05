@@ -18,7 +18,7 @@ const lineClient = new LineBotSDK.Client({
  */
 function daily(): void {
   const today = formatDate();
-  const altText = `【${today.toISOString().split('T')[0]}分】家族カード利用履歴`;
+  const altText = `【${today.toISOString().split('T')[0]}】家族カード利用速報`;
 
   const rakutenMailParser = new RakutenMailParser();
   const rakutenMailGetter = new RakutenMailGetter();
@@ -33,7 +33,7 @@ function daily(): void {
       Logger.log(familyPaymentInfoList);
 
       // LINEのフレックスメッセージを作成
-      const noticeMessage = new NoticePaymentHistoryMessage(familyPaymentInfoList);
+      const noticeMessage = new NoticePaymentHistoryMessage(familyPaymentInfoList, altText);
 
       // LINEにメッセージを送信
       sendLineMessage(noticeMessage, altText);
